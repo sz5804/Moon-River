@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35219.272
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Moon River", "Moon River.csproj", "{B6594D5C-446D-41D5-B700-5B3738E20328}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B6594D5C-446D-41D5-B700-5B3738E20328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6594D5C-446D-41D5-B700-5B3738E20328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6594D5C-446D-41D5-B700-5B3738E20328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6594D5C-446D-41D5-B700-5B3738E20328}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CAF13F74-A206-4F2C-8F27-777247C1D043}
+	EndGlobalSection
+EndGlobal
