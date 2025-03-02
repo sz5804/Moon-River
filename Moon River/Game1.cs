@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.ComponentModel;
 
 namespace Moon_River
 {
@@ -49,9 +50,17 @@ namespace Moon_River
 
         // NPC
         private NPC[] NPCs;
+        private NPC[] NPCsPT2;
         private Texture2D[] npcTextures;
         private Texture2D[] npcFullTextures;
         private int currentNPC;
+
+        // quest tracking
+        private Symbols progress = Symbols.Mushroom;
+        private bool scene2 = false;
+        private bool complete = false;
+        private Texture2D questMarker;
+        private NPC end;
 
         public Game1()
         {
@@ -106,7 +115,12 @@ namespace Moon_River
             buildings[5] = new Building(new Rectangle(1530, 1020, 80, 80), placeholder); // moon
 
             buildingBG = new Texture2D[6];
+            buildingBG[0] = this.Content.Load<Texture2D>("Mushroom House");
+            buildingBG[1] = this.Content.Load<Texture2D>("Star House");
             buildingBG[2] = this.Content.Load<Texture2D>("Heart Home");
+            buildingBG[3] = this.Content.Load<Texture2D>("Flower House");
+            buildingBG[4] = this.Content.Load<Texture2D>("Pen House");
+            buildingBG[5] = this.Content.Load<Texture2D>("Moon House");
 
             // NPCs
             NPCs = new NPC[6];
@@ -122,6 +136,14 @@ namespace Moon_River
             NPCs[4] = new NPC(new Rectangle(400, -50, 170, 170), penNPC, "../../../pen.txt");
             Texture2D moonNPC = this.Content.Load<Texture2D>("Moon");
             NPCs[5] = new NPC(new Rectangle(400, -50, 170, 170), moonNPC, "../../../moon.txt");
+
+            NPCsPT2 = new NPC[6];
+            NPCsPT2[0] = new NPC(new Rectangle(200, 230, 80, 80), mushroomNPC, "../../../mushroom2.txt");
+            NPCsPT2[1] = new NPC(new Rectangle(400, -50, 170, 170), starNPC, "../../../star2.txt");
+            NPCsPT2[2] = new NPC(new Rectangle(400, -50, 170, 170), heartNPC, "../../../heart2.txt");
+            NPCsPT2[3] = new NPC(new Rectangle(400, -50, 170, 170), flowerNPC, "../../../flower2.txt");
+            NPCsPT2[4] = new NPC(new Rectangle(400, -50, 170, 170), penNPC, "../../../pen2.txt");
+            NPCsPT2[5] = new NPC(new Rectangle(400, -50, 170, 170), moonNPC, "../../../moon2.txt");
 
             npcTextures = new Texture2D[6];
             npcTextures[0] = mushroomNPC;
@@ -141,7 +163,10 @@ namespace Moon_River
             npcFullTextures[3] = this.Content.Load<Texture2D>("Flower Full");
             npcFullTextures[4] = this.Content.Load<Texture2D>("Pen Full");
             npcFullTextures[5] = this.Content.Load<Texture2D>("Moon Full");
-            
+
+            // quest marker
+            questMarker = this.Content.Load<Texture2D>("Quest Marker");
+            end = new NPC(new Rectangle(200, 230, 80, 80), mushroomNPC, "../../../mushroom3.txt");
         }
 
         protected override void Update(GameTime gameTime)
@@ -243,6 +268,59 @@ namespace Moon_River
                                 buildings[currentBuilding].Y - _graphics.PreferredBackBufferHeight / 2 + 50); 
                             gameState = GameState.Explore;
                         }
+                        // QUEST PROGRESS TRACKING
+                        switch (progress)
+                        {
+                            case Symbols.Mushroom:
+                                if (!scene2 && currentNPC == (int)Symbols.Mushroom && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Moon;
+                                else if (scene2 && currentNPC == (int)Symbols.Mushroom && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Flower;
+                                else
+                                {
+                                    complete = true;
+                                }
+                                break;
+
+                            case Symbols.Moon:
+                                if (!scene2 && currentNPC == (int)Symbols.Moon && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Heart;
+                                else if (scene2 && currentNPC == (int)Symbols.Moon && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Mushroom;
+                                break;
+
+                            case Symbols.Heart:
+                                if (!scene2 && currentNPC == (int)Symbols.Heart && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Star;
+                                else if (scene2 && currentNPC == (int)Symbols.Heart && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Moon;
+                                break;
+
+                            case Symbols.Star:
+                                if (!scene2 && currentNPC == (int)Symbols.Star && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Pen;
+                                else if (scene2 && currentNPC == (int)Symbols.Star && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Heart;
+                                break;
+
+                            case Symbols.Pen:
+                                if (!scene2 && currentNPC == (int)Symbols.Pen && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Flower;
+                                else if (scene2 && currentNPC == (int)Symbols.Pen && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Star;
+                                break;
+
+                            case Symbols.Flower:
+                                if (!scene2 && currentNPC == (int)Symbols.Flower && NPCs[currentNPC].Played == true)
+                                {
+                                    progress = Symbols.Moon;
+                                    scene2 = true;
+                                    progress = Symbols.Mushroom;
+                                }
+                                else if (scene2 && currentNPC == (int)Symbols.Flower && NPCs[currentNPC].Played == true)
+                                    progress = Symbols.Pen;
+                                break;
+                        }
                     }
                     NPCs[currentNPC].Update(gameTime);
                     break;
@@ -341,10 +419,37 @@ namespace Moon_River
                         Color.White);
 
                     // npcs
-                    _spriteBatch.Draw(
+                    if (!scene2)
+                    {
+                        _spriteBatch.Draw(
                          npcTextures[(int)Symbols.Mushroom],
                          NPCs[(int)Symbols.Mushroom].Reposition(worldPos),
                          Color.White);
+                    }
+                    else if (complete)
+                    {
+                        _spriteBatch.Draw(
+                        npcTextures[(int)Symbols.Mushroom],
+                        end.Reposition(worldPos),
+                        Color.White);
+                    }
+                    else
+                    {
+                        _spriteBatch.Draw(
+                        npcTextures[(int)Symbols.Mushroom],
+                        NPCsPT2[(int)Symbols.Mushroom].Reposition(worldPos),
+                        Color.White);
+                    }
+                    
+
+                    if ((int)progress == currentNPC)
+                    {
+                        Rectangle NPCLoc = NPCs[currentNPC].Reposition(worldPos);
+                        _spriteBatch.Draw(
+                            questMarker,
+                            new Rectangle(NPCLoc.X + 50, NPCLoc.Y - 20, 30, 30),
+                            Color.White);
+                    }
 
                     // player
                     player.Draw(_spriteBatch);
@@ -357,9 +462,66 @@ namespace Moon_River
                                 Color.White);
                     NPCs[currentNPC].DrawString(_spriteBatch, coolfont);
 
-                    /*switch (currentNPC)
+                    /*switch (progress)
                     {
-                        // mom
+                        case Symbols.Mushroom:
+                            break;
+                        case Symbols.Star:
+                            break;
+                        case Symbols.Heart:
+                            break;
+                        case Symbols.Flower:
+                            break;
+                        case Symbols.Pen:
+                            break;
+                        case Symbols.Moon:
+                            break;
+                    }*/
+
+                    break;
+
+                case GameState.Building:
+                    // map
+                    _spriteBatch.Draw(
+                        buildingBG[currentBuilding],
+                        new Rectangle(
+                            (int)worldToScreen.X,
+                            (int)worldToScreen.Y,
+                            buildingBG[currentBuilding].Width,
+                            buildingBG[currentBuilding].Height),
+                        Color.White);
+
+                    // npc
+                    if (!scene2)
+                    {
+                        _spriteBatch.Draw(
+                        npcTextures[currentBuilding],
+                        NPCs[currentBuilding].Reposition(worldPos),
+                        Color.White);
+                    }
+                    else
+                    {
+                        _spriteBatch.Draw(
+                        npcTextures[currentBuilding],
+                        NPCsPT2[currentBuilding].Reposition(worldPos),
+                        Color.White);
+                    }
+                    
+
+                    // player
+                    player.Draw(_spriteBatch);
+
+                    // quest marker
+                    if ((int)progress == currentNPC)
+                    {
+                        Rectangle NPCLoc = NPCs[currentBuilding].Reposition(worldPos);
+                        _spriteBatch.Draw(
+                            questMarker,
+                            new Rectangle(NPCLoc.X + 50, NPCLoc.Y - 20, 20, 20),
+                            Color.White);
+                    }
+                    /*switch (currentBuilding)
+                    {
                         case (int) Symbols.Mushroom:
                             break;
                         case (int) Symbols.Star:
@@ -373,40 +535,7 @@ namespace Moon_River
                         case (int) Symbols.Moon:
                             break;
                     }*/
-                    break;
 
-                case GameState.Building:
-                    switch (currentBuilding)
-                    {
-                        case (int) Symbols.Mushroom:
-                            break;
-                        case (int) Symbols.Star:
-                            break;
-                        case (int) Symbols.Heart:
-                            // map
-                            _spriteBatch.Draw(
-                                buildingBG[currentBuilding],
-                                new Rectangle(
-                                    (int)worldToScreen.X, 
-                                    (int)worldToScreen.Y, 
-                                    buildingBG[currentBuilding].Width, 
-                                    buildingBG[currentBuilding].Height),
-                                Color.White);
-                            // npc
-                            _spriteBatch.Draw(
-                                npcTextures[currentBuilding],
-                                NPCs[currentBuilding].Reposition(worldPos),
-                                Color.White); 
-                            // player
-                            player.Draw(_spriteBatch);
-                            break;
-                        case (int) Symbols.Flower:
-                            break;
-                        case (int) Symbols.Pen:
-                            break;
-                        case (int) Symbols.Moon:
-                            break;
-                    }
                     break;
             }
             _spriteBatch.End();

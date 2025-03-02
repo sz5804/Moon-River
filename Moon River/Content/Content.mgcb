@@ -37,6 +37,18 @@
 /processorParam:TextureFormat=Color
 /build:Flower Full.png
 
+#begin Flower House.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Flower House.png
+
 #begin Flower.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -128,6 +140,18 @@
 /processorParam:TextureFormat=Color
 /build:Moon Full.png
 
+#begin Moon House.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Moon House.png
+
 #begin Moon.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -164,6 +188,18 @@
 /processorParam:TextureFormat=Color
 /build:moonriverbg.png
 
+#begin Mushroom House.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Mushroom House.png
+
 #begin Pen Full.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -175,6 +211,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Pen Full.png
+
+#begin Pen House.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Pen House.png
 
 #begin Pen.png
 /importer:TextureImporter
@@ -224,6 +272,18 @@
 /processorParam:TextureFormat=Color
 /build:player3.png
 
+#begin Quest Marker.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Quest Marker.png
+
 #begin Star Full.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -235,6 +295,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Star Full.png
+
+#begin Star House.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Star House.png
 
 #begin Star.png
 /importer:TextureImporter
