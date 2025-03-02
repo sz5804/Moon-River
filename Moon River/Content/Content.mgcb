@@ -26,6 +26,7 @@
 /build:blacksquare.png
 
 #begin Flower.png
+#begin MoonRiver Title Screen.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -35,6 +36,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
+
 /build:Flower.png
 
 #begin Heart Home.png
@@ -84,6 +86,7 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Moon.png
+/build:MoonRiver Title Screen.png
 
 #begin moonriverbg.png
 /importer:TextureImporter
