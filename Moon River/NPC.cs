@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,25 @@ namespace Moon_River
         {
             this.location = location;
             this.texture = texture;
+
+            dialogue = new List<string>();
+            dialogueLine = 0;
+
+            // file input
+            StreamReader input;
+            try
+            {
+                input = new StreamReader(filename);
+                string line;
+                while ((line = input.ReadLine()) != null!)
+                {
+                    dialogue.Add(line);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.Write (e.Message);
+            }
         }
 
         // method

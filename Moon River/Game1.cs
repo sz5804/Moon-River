@@ -113,7 +113,7 @@ namespace Moon_River
             Texture2D starNPC = this.Content.Load<Texture2D>("Star");
             NPCs[1] = new NPC(new Rectangle(0, 0, 80, 80), starNPC, ""); 
             Texture2D heartNPC = this.Content.Load<Texture2D>("Heart");
-            NPCs[2] = new NPC(new Rectangle(400, -50, 170, 170), heartNPC, "");
+            NPCs[2] = new NPC(new Rectangle(400, -50, 170, 170), heartNPC, "../../heart.txt");
             Texture2D flowerNPC = this.Content.Load<Texture2D>("Flower");
             NPCs[3] = new NPC(new Rectangle(0, 0, 80, 80), flowerNPC, "");
             Texture2D penNPC = this.Content.Load<Texture2D>("Pen");
