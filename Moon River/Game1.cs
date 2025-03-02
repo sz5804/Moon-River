@@ -72,7 +72,10 @@ namespace Moon_River
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-            titleScreen = this.Content.Load<Texture2D>("TitleScreen");
+
+            // menu
+            titleScreen = this.Content.Load<Texture2D>("MoonRiver Title Screen");
+
             // bg
             moonriverBG = this.Content.Load<Texture2D>("moonriverbg");
             screenPos = new Vector2(-moonriverBG.Width / 3 + 50, -moonriverBG.Height / 3 - 200);
@@ -289,7 +292,7 @@ namespace Moon_River
                     //title screen
                     _spriteBatch.Draw(
                         titleScreen,
-                        new Rectangle(0, 0,titleScreen.Width, titleScreen.Height),
+                        new Rectangle(0, 0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
                         Color.White);
                     break;
 
