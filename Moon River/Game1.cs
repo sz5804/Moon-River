@@ -27,6 +27,7 @@ namespace Moon_River
 
         private GameState gameState;
         private KeyboardState prevkb;
+        private SpriteFont coolfont;
 
         // title screen
         private Texture2D titleScreen;
@@ -49,6 +50,7 @@ namespace Moon_River
         // NPC
         private NPC[] NPCs;
         private Texture2D[] npcTextures;
+        private Texture2D[] npcFullTextures;
         private int currentNPC;
 
         public Game1()
@@ -109,17 +111,17 @@ namespace Moon_River
             // NPCs
             NPCs = new NPC[6];
             Texture2D mushroomNPC = this.Content.Load<Texture2D>("Mom");
-            NPCs[0] = new NPC(new Rectangle(0, 0, 80, 80), mushroomNPC, "");
+            NPCs[0] = new NPC(new Rectangle(200, 230, 80, 80), mushroomNPC, "../../../mushroom.txt");
             Texture2D starNPC = this.Content.Load<Texture2D>("Star");
-            NPCs[1] = new NPC(new Rectangle(0, 0, 80, 80), starNPC, ""); 
+            NPCs[1] = new NPC(new Rectangle(400, -50, 170, 170), starNPC, "../../../star.txt"); 
             Texture2D heartNPC = this.Content.Load<Texture2D>("Heart");
-            NPCs[2] = new NPC(new Rectangle(400, -50, 170, 170), heartNPC, "../../heart.txt");
+            NPCs[2] = new NPC(new Rectangle(400, -50, 170, 170), heartNPC, "../../../heart.txt");
             Texture2D flowerNPC = this.Content.Load<Texture2D>("Flower");
-            NPCs[3] = new NPC(new Rectangle(0, 0, 80, 80), flowerNPC, "");
+            NPCs[3] = new NPC(new Rectangle(400, -50, 170, 170), flowerNPC, "../../../flower.txt");
             Texture2D penNPC = this.Content.Load<Texture2D>("Pen");
-            NPCs[4] = new NPC(new Rectangle(0, 0, 80, 80), penNPC, "");
+            NPCs[4] = new NPC(new Rectangle(400, -50, 170, 170), penNPC, "../../../pen.txt");
             Texture2D moonNPC = this.Content.Load<Texture2D>("Moon");
-            NPCs[5] = new NPC(new Rectangle(0, 0, 80, 80), moonNPC, "");
+            NPCs[5] = new NPC(new Rectangle(400, -50, 170, 170), moonNPC, "../../../moon.txt");
 
             npcTextures = new Texture2D[6];
             npcTextures[0] = mushroomNPC;
@@ -128,6 +130,18 @@ namespace Moon_River
             npcTextures[3] = flowerNPC;
             npcTextures[4] = penNPC;
             npcTextures[5] = moonNPC;
+
+            // dialogue closeup textures
+            coolfont = this.Content.Load<SpriteFont>("font");
+
+            npcFullTextures = new Texture2D[6];
+            npcFullTextures[0] = this.Content.Load<Texture2D>("Mom Full");
+            npcFullTextures[1] = this.Content.Load<Texture2D>("Star Full");
+            npcFullTextures[2] = this.Content.Load<Texture2D>("Heart Full");
+            npcFullTextures[3] = this.Content.Load<Texture2D>("Flower Full");
+            npcFullTextures[4] = this.Content.Load<Texture2D>("Pen Full");
+            npcFullTextures[5] = this.Content.Load<Texture2D>("Moon Full");
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -175,6 +189,7 @@ namespace Moon_River
                         if (NPCs[i].CanTalk(player, worldPos) && kb.IsKeyDown(Keys.Enter) && prevkb.IsKeyUp(Keys.Enter))
                         {
                             currentNPC = i;
+                            NPCs[currentNPC].Played = false;
                             gameState = GameState.Dialogue;
                         }
                     }
@@ -207,7 +222,7 @@ namespace Moon_River
                     break;
 
                 case GameState.Dialogue:
-                    if ((kb.IsKeyDown(Keys.Q) && prevkb.IsKeyUp(Keys.Q)) || NPCs[currentNPC].CurrentLine > NPCs[currentNPC].Script.Count)
+                    if ((kb.IsKeyDown(Keys.Q) && prevkb.IsKeyUp(Keys.Q)) || NPCs[currentNPC].Played == true)
                     {
                         // return to building if in building
                         if (buildings[currentBuilding].Occupied == true)
@@ -229,6 +244,7 @@ namespace Moon_River
                             gameState = GameState.Explore;
                         }
                     }
+                    NPCs[currentNPC].Update(gameTime);
                     break;
 
                 case GameState.Building:
@@ -252,6 +268,7 @@ namespace Moon_River
                     if (NPCs[currentBuilding].CanTalk(player, worldPos) && kb.IsKeyDown(Keys.Enter) && prevkb.IsKeyUp(Keys.Enter))
                     {
                         currentNPC = currentBuilding;
+                        NPCs[currentNPC].Played = false;
                         gameState = GameState.Dialogue;
                     }
 
@@ -323,12 +340,24 @@ namespace Moon_River
                             moonriverBG.Height),
                         Color.White);
 
+                    // npcs
+                    _spriteBatch.Draw(
+                         npcTextures[(int)Symbols.Mushroom],
+                         NPCs[(int)Symbols.Mushroom].Reposition(worldPos),
+                         Color.White);
+
                     // player
                     player.Draw(_spriteBatch);
                     break;
 
                 case GameState.Dialogue:
-                    switch (currentNPC)
+                    _spriteBatch.Draw(
+                                npcFullTextures[currentNPC],
+                                new Rectangle(200, 20, 500, 500),
+                                Color.White);
+                    NPCs[currentNPC].DrawString(_spriteBatch, coolfont);
+
+                    /*switch (currentNPC)
                     {
                         // mom
                         case (int) Symbols.Mushroom:
@@ -343,7 +372,7 @@ namespace Moon_River
                             break;
                         case (int) Symbols.Moon:
                             break;
-                    }
+                    }*/
                     break;
 
                 case GameState.Building:
