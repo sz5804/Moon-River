@@ -19,6 +19,9 @@ namespace Moon_River
         private GameState gameState;
         private KeyboardState prevkb;
 
+        // title screen
+        private Texture2D titleScreen;
+
         // bg
         private Texture2D moonriverBG;
         private Vector2 screenPos;
@@ -58,7 +61,7 @@ namespace Moon_River
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
-
+            titleScreen = this.Content.Load<Texture2D>("TitleScreen");
             // bg
             moonriverBG = this.Content.Load<Texture2D>("moonriverbg");
             screenPos = new Vector2(-moonriverBG.Width / 3 + 50, -moonriverBG.Height / 3 - 200);
@@ -194,6 +197,11 @@ namespace Moon_River
             switch (gameState)
             {
                 case GameState.Menu:
+                    //title screen
+                    _spriteBatch.Draw(
+                        titleScreen,
+                        new Rectangle(0, 0,titleScreen.Width, titleScreen.Height),
+                        Color.White);
                     break;
 
                 case GameState.Explore:
