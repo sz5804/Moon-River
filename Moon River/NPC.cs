@@ -2,32 +2,32 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-// using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Moon_River
 {
-    internal class Building : GameObject
+    internal class NPC : GameObject
     {
-        // field 
-        private bool inBuilding;
-
-        // property
-        public bool Occupied { get => inBuilding; set => inBuilding = value; }
+        // fields
+        private List<string> dialogue;
+        private int dialogueLine;
+        
+        // properties
+        public List<string> Script { get => dialogue; set => dialogue = value; }
+        public int CurrentLine { get => dialogueLine; }
 
         // constructor
-        public Building(Rectangle location, Texture2D texture)
-            : base(location, texture)
+        public NPC(Rectangle location, Texture2D texture, string filename)
+            :base(location, texture)
         {
             this.location = location;
             this.texture = texture;
-            inBuilding = false;
         }
 
-        // methods
-        public bool CanEnterBuilding(Player player, Vector2 worldPos)
+        // method
+        public bool CanTalk(Player player, Vector2 worldPos)
         {
             Rectangle currentPos = this.Reposition(worldPos);
             if (player.X + player.Location.Width < currentPos.X)

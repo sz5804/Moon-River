@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework.Input;
+// using System.Numerics;
 
 namespace Moon_River
 {
@@ -17,6 +19,7 @@ namespace Moon_River
         // properties
         public int X { get => location.X; set => location.X = value; }
         public int Y { get => location.Y; set => location.Y = value; }
+        public Rectangle Location { get => location; }
 
         // constructor
         public GameObject(Rectangle location, Texture2D texture)
