@@ -19,7 +19,7 @@ namespace Moon_River
         // properties
         public int X { get => location.X; set => location.X = value; }
         public int Y { get => location.Y; set => location.Y = value; }
-        public Rectangle Location { get => location; }
+        public Rectangle Location { get => location; set => location = value; }
 
         // constructor
         public GameObject(Rectangle location, Texture2D texture)
