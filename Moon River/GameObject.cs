@@ -11,8 +11,8 @@ namespace Moon_River
     internal class GameObject
     {
         // fields
-        private Rectangle location;
-        private Texture2D texture;
+        protected Rectangle location;
+        protected Texture2D texture;
 
         // properties
         public int X { get => location.X; set => location.X = value; }
