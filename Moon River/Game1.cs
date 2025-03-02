@@ -4,10 +4,19 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Moon_River
 {
+    enum GameState
+    {
+        Menu,
+        Explore,
+        Dialogue,
+        Building
+    }
     public class Game1 : Game
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+
+        private GameState gameState;
 
         // bg
         private Texture2D moonriverBG;
@@ -29,6 +38,8 @@ namespace Moon_River
         {
             // TODO: Add your initialization logic here
             worldPos = new Vector2();
+            gameState = GameState.Menu;
+
             base.Initialize();
         }
 
@@ -37,8 +48,11 @@ namespace Moon_River
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
             // TODO: use this.Content to load your game content here
+
+            // bg
             moonriverBG = this.Content.Load<Texture2D>("moonriverbg");
             screenPos = new Vector2(-moonriverBG.Width / 3 + 50, -moonriverBG.Height / 3 - 200);
+
             // player
             playerAnim = new Texture2D[3];
             for (int i = 0; i < 3; i++)
@@ -60,30 +74,54 @@ namespace Moon_River
 
             // TODO: Add your update logic here
             KeyboardState kb = Keyboard.GetState();
-            player.Walking = false;
 
-            if (kb.IsKeyDown(Keys.Up))
+            switch (gameState)
             {
-                worldPos.Y -= 2;
-                player.Walking = true;
-            }
-            if (kb.IsKeyDown(Keys.Down))
-            {
-                worldPos.Y += 2;
-                player.Walking = true;
-            }
-            if (kb.IsKeyDown(Keys.Right))
-            {
-                worldPos.X += 2;
-                player.Walking = true;
-            }
-            if (kb.IsKeyDown(Keys.Left))
-            {
-                worldPos.X -= 2;
-                player.Walking = true;
-            }
+                case GameState.Menu:
+                    // transition
+                    if (kb.IsKeyDown(Keys.Enter))
+                    {
+                        gameState = GameState.Explore;
+                    }
+                    break;
 
-            player.Update(gameTime);
+                case GameState.Explore:
+                    // transition for dialogue & building
+                    
+                    // happenings
+                    player.Walking = false;
+
+                    if (kb.IsKeyDown(Keys.Up) && worldPos.Y > screenPos.X - _graphics.PreferredBackBufferHeight/2) // idk why this works but it does so DONT TOUCH IT
+                    {
+                        worldPos.Y -= 2;
+                        player.Walking = true;
+                    }
+                    if (kb.IsKeyDown(Keys.Down) && worldPos.Y < moonriverBG.Height/2 - 200)
+                    {
+                        worldPos.Y += 2;
+                        player.Walking = true;
+                    }
+                    if (kb.IsKeyDown(Keys.Right) && worldPos.X < moonriverBG.Width/2 - 260)
+                    {
+                        worldPos.X += 2;
+                        player.Walking = true;
+                    }
+                    if (kb.IsKeyDown(Keys.Left) && worldPos.X > screenPos.X + 20)
+                    {
+                        worldPos.X -= 2;
+                        player.Walking = true;
+                    }
+
+                    player.Update(gameTime); 
+                    break;
+
+                case GameState.Dialogue:
+                    break;
+
+                case GameState.Building:
+                    break;
+            }
+            
             base.Update(gameTime);
         }
 
@@ -95,13 +133,27 @@ namespace Moon_River
 
             // TODO: Add your drawing code here
             _spriteBatch.Begin();
-            
-            _spriteBatch.Draw(
-                moonriverBG, 
-                new Rectangle((int)worldToScreen.X, (int)worldToScreen.Y, moonriverBG.Width, moonriverBG.Height), 
-                Color.White);
-            player.Draw(_spriteBatch);
+            switch (gameState)
+            {
+                case GameState.Menu:
+                    break;
 
+                case GameState.Explore:
+                    // map
+                    _spriteBatch.Draw(
+                        moonriverBG,
+                        new Rectangle((int)worldToScreen.X, (int)worldToScreen.Y, moonriverBG.Width, moonriverBG.Height),
+                        Color.White);
+                    // player
+                    player.Draw(_spriteBatch); 
+                    break;
+
+                case GameState.Dialogue:
+                    break;
+
+                case GameState.Building:
+                    break;
+            }
             _spriteBatch.End();
             base.Draw(gameTime);
         }
