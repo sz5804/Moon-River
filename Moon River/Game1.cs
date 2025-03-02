@@ -10,7 +10,8 @@ namespace Moon_River
         Menu,
         Explore,
         Dialogue,
-        Building
+        Building,
+        End
     }
     enum Symbols
     {
@@ -61,6 +62,9 @@ namespace Moon_River
         private bool complete = false;
         private Texture2D questMarker;
         private NPC end;
+
+        // end
+        private Texture2D endScreen;
 
         public Game1()
         {
@@ -138,7 +142,7 @@ namespace Moon_River
             NPCs[5] = new NPC(new Rectangle(400, -50, 170, 170), moonNPC, "../../../moon.txt");
 
             NPCsPT2 = new NPC[6];
-            NPCsPT2[0] = new NPC(new Rectangle(200, 230, 80, 80), mushroomNPC, "../../../mushroom2.txt");
+            NPCsPT2[0] = new NPC(new Rectangle(200, 230, 170, 170), mushroomNPC, "../../../mushroom2.txt");
             NPCsPT2[1] = new NPC(new Rectangle(400, -50, 170, 170), starNPC, "../../../star2.txt");
             NPCsPT2[2] = new NPC(new Rectangle(400, -50, 170, 170), heartNPC, "../../../heart2.txt");
             NPCsPT2[3] = new NPC(new Rectangle(400, -50, 170, 170), flowerNPC, "../../../flower2.txt");
@@ -166,7 +170,10 @@ namespace Moon_River
 
             // quest marker
             questMarker = this.Content.Load<Texture2D>("Quest Marker");
-            end = new NPC(new Rectangle(200, 230, 80, 80), mushroomNPC, "../../../mushroom3.txt");
+            end = new NPC(new Rectangle(200, 230, 170, 170), mushroomNPC, "../../../mushroom3.txt");
+
+            // end
+            endScreen = this.Content.Load<Texture2D>("End Screen");
         }
 
         protected override void Update(GameTime gameTime)
@@ -323,6 +330,10 @@ namespace Moon_River
                         }
                     }
                     NPCs[currentNPC].Update(gameTime);
+                    if (complete)
+                    {
+                        gameState = GameState.End;
+                    }
                     break;
 
                 case GameState.Building:
@@ -376,6 +387,12 @@ namespace Moon_River
 
                     player.Update(gameTime);
                     break;
+                case GameState.End:
+                    if (kb.IsKeyDown(Keys.Enter) && prevkb.IsKeyUp(Keys.Enter))
+                    {
+                        gameState = GameState.Menu;
+                    }
+                    break;
             }
             prevkb = kb;
             base.Update(gameTime);
@@ -399,6 +416,8 @@ namespace Moon_River
                     break;
 
                 case GameState.Explore:
+                    bool interact = false;
+                    
                     // building
                     for (int i = 0; i < buildings.Length; i++)
                     {
@@ -406,6 +425,10 @@ namespace Moon_River
                             placeholder,
                             buildings[i].Reposition(worldPos),
                             Color.White);
+                        if (buildings[i].CanEnterBuilding(player, worldPos))
+                        {
+                            interact = true;
+                        }
                     }
 
                     // map
@@ -425,22 +448,11 @@ namespace Moon_River
                          npcTextures[(int)Symbols.Mushroom],
                          NPCs[(int)Symbols.Mushroom].Reposition(worldPos),
                          Color.White);
+                        if (NPCs[0].CanTalk(player, worldPos))
+                        {
+                            interact = true;
+                        }
                     }
-                    else if (complete)
-                    {
-                        _spriteBatch.Draw(
-                        npcTextures[(int)Symbols.Mushroom],
-                        end.Reposition(worldPos),
-                        Color.White);
-                    }
-                    else
-                    {
-                        _spriteBatch.Draw(
-                        npcTextures[(int)Symbols.Mushroom],
-                        NPCsPT2[(int)Symbols.Mushroom].Reposition(worldPos),
-                        Color.White);
-                    }
-                    
 
                     if ((int)progress == currentNPC)
                     {
@@ -453,6 +465,18 @@ namespace Moon_River
 
                     // player
                     player.Draw(_spriteBatch);
+
+                    // instructions 
+                    
+                    if (interact)
+                    {
+                        _spriteBatch.DrawString(
+                        coolfont,
+                        "Press 'Enter' to interact.",
+                        new Vector2(10, _graphics.PreferredBackBufferHeight - 50),
+                        Color.White);
+                    }
+
                     break;
 
                 case GameState.Dialogue:
@@ -499,6 +523,13 @@ namespace Moon_River
                         NPCs[currentBuilding].Reposition(worldPos),
                         Color.White);
                     }
+                    else if (complete)
+                    {
+                        _spriteBatch.Draw(
+                        npcTextures[(int)Symbols.Mushroom],
+                        end.Reposition(worldPos),
+                        Color.White);
+                    }
                     else
                     {
                         _spriteBatch.Draw(
@@ -520,6 +551,14 @@ namespace Moon_River
                             new Rectangle(NPCLoc.X + 50, NPCLoc.Y - 20, 20, 20),
                             Color.White);
                     }
+
+                    // instructions
+                    _spriteBatch.DrawString(
+                        coolfont,
+                        "Press 'q' to exit.",
+                        new Vector2(10, _graphics.PreferredBackBufferHeight - 50),
+                        Color.White);
+
                     /*switch (currentBuilding)
                     {
                         case (int) Symbols.Mushroom:
@@ -536,6 +575,12 @@ namespace Moon_River
                             break;
                     }*/
 
+                    break;
+                case GameState.End:
+                    _spriteBatch.Draw(
+                        endScreen,
+                        new Rectangle(0,0, _graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight),
+                        Color.White);
                     break;
             }
             _spriteBatch.End();
